@@ -1,11 +1,11 @@
 # Código TypeScript
 
+## CORE.TS
+
 ## Caminho do arquivo JSON
 
 ```ts
-// Caminho do arquivo JSON onde os dados serão armazenados
-// __dirname -> pasta atual do arquivo
-const jsonFilePath = __dirname + '/data.temp.json';
+const jsonFilePath = __dirname + '/data.temp.json'; // Caminho do arquivo JSON onde os dados serão armazenados
 ```
 
 ---
@@ -13,9 +13,7 @@ const jsonFilePath = __dirname + '/data.temp.json';
 ## Carregamento inicial dos dados
 
 ```ts
-// Carrega os dados do arquivo assim que o sistema inicia
-// A lista será um array de strings
-const list: string[] = await loadFromFile();
+const list: string[] = await loadFromFile(); // Carrega os dados do arquivo assim que o sistema inicia
 ```
 
 ---
@@ -26,15 +24,11 @@ const list: string[] = await loadFromFile();
 // Função assíncrona responsável por carregar os dados do arquivo JSON
 async function loadFromFile() {
   try {
-    
-    // Abre o arquivo usando a API do Bun
-    const file = Bun.file(jsonFilePath);
+    const file = Bun.file(jsonFilePath); // Abre o arquivo usando a API do Bun
 
-    // Lê o conteúdo do arquivo como texto
-    const content = await file.text();
+    const content = await file.text(); // Lê o conteúdo do arquivo como texto
 
-    // Converte o texto JSON em um array de strings
-    return JSON.parse(content) as string[];
+    return JSON.parse(content) as string[]; // Converte o texto JSON em um array de strings
 
   // Bloco que capta possíveis erros na função
   } catch (error: any) {
@@ -43,8 +37,7 @@ async function loadFromFile() {
     if (error.code === 'ENOENT')
       return [];
 
-    // Caso seja outro erro, ele será lançado novamente
-    throw error;
+    throw error; // Caso seja outro erro, ele será lançado novamente
   }
 }
 ```
@@ -57,9 +50,7 @@ async function loadFromFile() {
 // Função assíncrona responsável por salvar os dados no arquivo JSON
 async function saveToFile() {
   try {
-
-    // Converte o array "list" em JSON e salva no arquivo
-    await Bun.write(jsonFilePath, JSON.stringify(list));
+    await Bun.write(jsonFilePath, JSON.stringify(list)); // Converte o array "list" em JSON e salva no arquivo
 
   // Bloco que capta possíveis erros na função
   } catch (error: any) {
@@ -77,12 +68,9 @@ async function saveToFile() {
 ```ts
 // Função assíncrona que adiciona 1 item na lista
 async function addItem(item: string) {
+  list.push(item); // Adiciona o item no array
 
-  // Adiciona o item no array
-  list.push(item);
-
-  // Salva a lista atualizada no arquivo
-  await saveToFile();
+  await saveToFile(); // Salva a lista atualizada no arquivo
 }
 ```
 
@@ -93,9 +81,7 @@ async function addItem(item: string) {
 ```ts
 // Função assíncrona que retorna todos os itens da lista
 async function getItems() {
-
-  // Retorna o array completo
-  return list;
+  return list; // Retorna o array completo
 }
 ```
 
@@ -111,11 +97,9 @@ async function updateItem(index: number, newItem: string) {
   if (index < 0 || index >= list.length)
     throw new Error("Index fora dos limites");
 
-  // Substitui o item antigo pelo novo
-  list[index] = newItem;
+  list[index] = newItem; // Substitui o item antigo pelo novo
 
-  // Salva a lista atualizada
-  await saveToFile();
+  await saveToFile(); // Salva a lista atualizada
 }
 ```
 
@@ -131,11 +115,9 @@ async function removeItem(index: number) {
   if (index < 0 || index >= list.length)
     throw new Error("Index fora dos limites");
 
-  // Remove 1 item na posição informada
-  list.splice(index, 1);
+  list.splice(index, 1); // Remove 1 item na posição informada
 
-  // Salva a lista após a remoção
-  await saveToFile();
+  await saveToFile(); // Salva a lista após a remoção
 }
 ```
 
@@ -144,24 +126,17 @@ async function removeItem(index: number) {
 ## Exportação das funções
 
 ```ts
-// Exporta as funções para serem utilizadas em outros arquivos
-export default {
-  addItem,
-  getItems,
-  updateItem,
-  removeItem
-};
+export default { addItem, getItems, updateItem, removeItem }; // Exporta as funções para serem utilizadas em outros arquivos
 ```
 
 ---
 
-# Servidor HTTP com Bun
+# Servidor HTTP com Bun (API.TS)
 
 ## Importação do módulo principal
 
 ```ts
-// Importa o módulo "todo" contendo as funções CRUD
-import todo from "./core.ts";
+import todo from "./core.ts"; // Importa o módulo "todo" contendo as funções CRUD
 ```
 
 ---
@@ -172,40 +147,31 @@ import todo from "./core.ts";
 // Cria um servidor HTTP usando Bun
 const server = Bun.serve({
 
-  // Porta onde o servidor irá rodar
-  port: 3000,
+  port: 3000, // Porta onde o servidor irá rodar
 
   // Rotas da aplicação
   routes: {
 
-    // Rota principal "/"
-    // Retorna o arquivo HTML da interface
-    "/": new Response(Bun.file("./public/index.html")),
+    "/": new Response(Bun.file("./public/index.html")), // Rota principal "/" (Retorna o arquivo HTML da interface)
 
     /* ROTAS DO TODO */
     
     "/api/todo": {
 
-      // Método GET
-      // Retorna todos os itens da lista
+      // Método GET (Retorna todos os itens da lista)
       GET: async () => {
 
-        // Busca os itens
-        const items = await todo.getItems();
+        const items = await todo.getItems(); // Busca os itens
 
-        // Retorna os dados em formato JSON
-        return Response.json(items);
+        return Response.json(items); // Retorna os dados em formato JSON
       },
 
-      // Método POST
-      // Adiciona um novo item
+      // Método POST (Adiciona um novo item)
       POST: async (req) => {
 
-        // Converte o corpo da requisição em JSON
-        const data = await req.json() as any;
+        const data = await req.json() as any; // Converte o corpo da requisição em JSON
 
-        // Pega o campo "item"
-        const item = data.item || null;
+        const item = data.item || null; // Pega o campo "item"
 
         // Verifica se o item foi enviado
         if (!item)
@@ -214,23 +180,19 @@ const server = Bun.serve({
             { status: 400 }
           );
 
-        // Adiciona o item na lista
-        await todo.addItem(item);
+        await todo.addItem(item); // Adiciona o item na lista
 
-        // Retorna os dados enviados
-        return Response.json(data);
+        return Response.json(data); // Retorna os dados enviados
       },
     },
 
     // Rota com parâmetro dinâmico ":index"
     "/api/todo/:index": {
 
-      // Método PUT
-      // Atualiza um item específico
+      // Método PUT (Atualiza um item específico)
       PUT: async (req) => {
 
-        // Converte o índice da URL para número
-        const index = parseInt(req.params.index);
+        const index = parseInt(req.params.index); // Converte o índice da URL para número
 
         // Verifica se o índice é válido
         if (isNaN(index))
@@ -239,11 +201,9 @@ const server = Bun.serve({
             { status: 400 }
           );
 
-        // Obtém os dados enviados
-        const data = await req.json() as any;
+        const data = await req.json() as any; // Obtém os dados enviados
 
-        // Novo valor do item
-        const newItem = data.newItem || null;
+        const newItem = data.newItem || null; // Novo valor do item
 
         // Verifica se o novo item foi enviado
         if (!newItem)
@@ -254,27 +214,23 @@ const server = Bun.serve({
 
         try {
 
-          // Atualiza o item
-          await todo.updateItem(index, newItem);
+          await todo.updateItem(index, newItem); // Atualiza o item
 
-          // Retorna mensagem de sucesso
           return Response.json(
             `Item no índice ${index} atualizado para "${newItem}"`
-          );
+          ); // Retorna mensagem de sucesso
 
+        // Bloco que capta possíveis erros na função
         } catch (error: any) {
 
-          // Retorna erro caso aconteça algum problema
-          return Response.json(error.message, { status: 400 });
+          return Response.json(error.message, { status: 400 }); // Retorna erro caso aconteça algum problema
         }
       },
 
-      // Método DELETE
-      // Remove um item pelo índice
+      // Método DELETE (Remove um item pelo índice)
       DELETE: async (req) => {
 
-        // Converte o índice para número
-        const index = parseInt(req.params.index);
+        const index = parseInt(req.params.index); // Converte o índice para número
 
         // Verifica se é válido
         if (isNaN(index))
@@ -282,18 +238,16 @@ const server = Bun.serve({
 
         try {
 
-          // Remove o item
-          await todo.removeItem(index);
+          await todo.removeItem(index); // Remove o item
 
-          // Retorna mensagem de sucesso
           return Response.json(
             `Item no índice ${index} removido com sucesso`
-          );
+          ); // Retorna mensagem de sucesso
 
+        // Bloco que capta possíveis erros na função
         } catch (error: any) {
 
-          // Retorna erro caso aconteça
-          return Response.json(error.message, { status: 400 });
+          return Response.json(error.message, { status: 400 }); // Retorna erro caso aconteça
         }
       },
     },
@@ -305,21 +259,17 @@ const server = Bun.serve({
       // GET simples
       GET: () => {
 
-        // Retorna um texto com timestamp atual
-        return new Response(`Esse é o exemplo: ${Date.now()}`);
+        return new Response(`Esse é o exemplo: ${Date.now()}`); // Retorna um texto com timestamp atual
       },
 
       // POST simples
       POST: async (req) => {
 
-        // Recebe os dados enviados
-        const data = await req.json() as any;
+        const data = await req.json() as any; // Recebe os dados enviados
 
-        // Adiciona a data atual
-        data.recebidoEm = new Date().toLocaleDateString("pt-BR");
+        data.recebidoEm = new Date().toLocaleDateString("pt-BR"); // Adiciona a data atual
 
-        // Retorna os dados atualizados
-        return Response.json(data);
+        return Response.json(data); // Retorna os dados atualizados
       },
     },
 
@@ -329,57 +279,46 @@ const server = Bun.serve({
       // Método PUT
       PUT: async (req, params) => {
 
-        // Obtém o ID da URL
-        const { id } = req.params;
+        const { id } = req.params; // Obtém o ID da URL
 
-        // Obtém os dados enviados
-        const data = await req.json() as any;
+        const data = await req.json() as any; // Obtém os dados enviados
 
-        // Adiciona o ID nos dados
-        data.id = id;
+        data.id = id; // Adiciona o ID nos dados
 
-        // Adiciona data atual
-        data.recebidoEm = new Date().toLocaleDateString("pt-BR");
+        data.recebidoEm = new Date().toLocaleDateString("pt-BR"); // Adiciona data atual
 
-        // Retorna JSON
-        return Response.json(data);
+        return Response.json(data); // Retorna JSON
       },
 
       // Método PATCH
       PATCH: async (req, params) => {
 
-        // Obtém o ID da URL
-        const { id } = req.params;
+        const { id } = req.params; // Obtém o ID da URL
 
-        // Dados enviados
-        const data = await req.json() as any;
+        const data = await req.json() as any; // Dados enviados
 
-        // Mostra quais campos foram atualizados
-        data.chavesAtualizadas = Object.keys(data);
+        data.chavesAtualizadas = Object.keys(data); // Mostra quais campos foram atualizados
 
-        // Adiciona ID
-        data.id = id;
+        data.id = id; // Adiciona ID
 
-        // Adiciona data da atualização
-        data.atualizadoEm = new Date().toLocaleDateString("pt-BR");
+        data.atualizadoEm = new Date().toLocaleDateString("pt-BR"); // Adiciona data da atualização
 
-        // Retorna os dados atualizados
-        return Response.json(data);
+        return Response.json(data); // Retorna os dados atualizados
       },
 
       // Método DELETE
       DELETE: (req, params) => {
 
-        // Obtém o ID
-        const { id } = req.params;
+        const { id } = req.params; // Obtém o ID
 
-        // Retorna mensagem de exclusão
         return new Response(
           `Recurso com id ${id} deletado`,
           { status: 200 }
-        );
+        ); // Retorna mensagem de exclusão
       }
     }
+
+    /* FIM DOS EXEMPLOS */
   },
 
   // Caso nenhuma rota seja encontrada, retorna o erro 404
@@ -394,6 +333,5 @@ const server = Bun.serve({
 ## Inicialização do servidor
 
 ```ts
-// Mostra no terminal a URL do servidor
-console.log(`Server running at http://localhost:${server.port}`);
+console.log(`Server running at http://localhost:${server.port}`); // Mostra no terminal a URL do servidor
 ```
