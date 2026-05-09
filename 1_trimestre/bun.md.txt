@@ -1,0 +1,75 @@
+# Bun
+
+## O que é?
+
+Bun é um runtime JavaScript/TypeScript extremamente rápido.
+
+Ele substitui:
+- Node.js
+- npm
+- yarn
+- vite
+- jest
+
+Tudo em uma ferramenta só.
+
+## Instalação
+
+```bash
+npm install -g bun
+```
+
+ou
+
+```bash
+curl -fsSL https://bun.sh/install | bash
+```
+
+## Criar projeto
+
+```bash
+bun init
+```
+
+## Rodar TypeScript
+
+```bash
+bun run index.ts
+```
+
+## Instalar dependências
+
+```bash
+bun add express
+```
+
+## Scripts
+
+```json
+"scripts": {
+  "dev": "bun run src/index.ts"
+}
+```
+
+## Rodar scripts
+
+```bash
+bun run dev
+```
+
+## Vantagens
+
+- Muito rápido
+- TS nativo
+- Package manager integrado
+- Test runner integrado
+
+## Comandos úteis
+
+```bash
+bun install
+bun add
+bun remove
+bun update
+bun test
+```
