@@ -2,11 +2,11 @@
 
 ## O que é uma API?
 
-API permite comunicação entre sistemas.
+API é um conjunto de regras que um sistema que deseja a utilizar deve seguir
 
 ## REST
 
-REST é um padrão para APIs HTTP.
+REST é um padrão para APIs que possuem todos os métodos HTTP
 
 ## Métodos HTTP
 
