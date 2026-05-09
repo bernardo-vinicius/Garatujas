@@ -1,8 +1,8 @@
-# TypeScript Essencial
+# TypeScript
 
 ## O que é?
 
-TypeScript é JavaScript com tipagem.
+TypeScript é um superset de JavaScript que adiociona tipagem
 
 ## Tipos básicos
 
@@ -18,12 +18,6 @@ let ativo: boolean = true
 let numeros: number[] = [1,2,3]
 ```
 
-## Union Type
-
-```ts
-let id: string | number
-```
-
 ## Funções
 
 ```ts
@@ -32,38 +26,12 @@ function soma(a:number, b:number): number {
 }
 ```
 
-## Interface
-
-```ts
-interface Usuario {
-    nome: string
-    idade: number
-}
-```
-
-## Type
-
-```ts
-type Produto = {
-    nome: string
-    preco: number
-}
-```
-
-## Generics
-
-```ts
-function identidade<T>(valor:T): T {
-    return valor
-}
-```
-
 ## Any
 
-Evite usar:
+Keyword que torna a tipagem não obrigatória (Utilizar com cautela)
 
 ```ts
-let valor:any
+let valor: any
 ```
 
 ## Diferença entre JS e TS
